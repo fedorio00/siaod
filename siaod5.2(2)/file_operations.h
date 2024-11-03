@@ -8,14 +8,10 @@
 
 using namespace std;
 
-struct Patient {
-    int policyNumber;
-    char lastName[50];
-    char firstName[50];
-    char patronymic[50];
-    char diseaseCode[10];
-    char diagnosisDate[11]; // YYYY-MM-DD
-    int doctorCode;
+struct Specialization {
+    int specialtyCode;
+    char universityName[50];
+    char specialtyName[50];
 };
 
 bool fileExists(const string& filename);
@@ -24,7 +20,7 @@ void convertBinaryToText(const string& inputFilename, const string& outputFilena
 void displayBinaryFileContent(const string& filename);
 void accessRecordByIndex(const string& filename, int index);
 void deleteRecordByKey(const string& filename, int key);
-void createPatientListByDiseaseCode(const string& inputFilename, const string& outputFilename, int diseaseCode);
-void deletePatientByKey(const string& filename, int key);
+void generateUniversityListBySpecialty(int specialtyCode, const string& outputFilename);
+void changeSpecialtyCodeByName(const string& specialtyName, int newCode);
 
 #endif // FILE_OPERATIONS_H

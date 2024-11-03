@@ -5,10 +5,8 @@ using namespace std;
 
 int main() {
     string filename;
-
     cout << "Enter input filename: ";
     cin >> filename;
-
     int choice;
     do {
 
@@ -17,26 +15,18 @@ int main() {
              << "3. Display binary file content\n"
              << "4. Access record by index\n"
              << "5. Delete record by key\n"
-             << "6. Create patient list by disease code\n"
-             << "7. Delete patient by key\n"
+             << "6. Generate university list by specialty\n"
+             << "7. Change specialty code by name\n"
              << "0. Exit\n"
-
              << "Choose an option: ";
-
         cin >> choice;
-
-
         switch (choice) {
             case 1: {
                 string outputFilename;
-
                 cout << "Enter output filename for binary: ";
                 cin >> outputFilename;
-
                 convertTextToBinary(filename, outputFilename);
-
                 break;
-
             }
             case 2: {
                 string outputFilename;
@@ -44,7 +34,6 @@ int main() {
                 cin >> outputFilename;
                 convertBinaryToText(filename, outputFilename);
                 break;
-
             }
             case 3:
                 displayBinaryFileContent(filename);
@@ -61,33 +50,30 @@ int main() {
 
             case 5: {
                 int key;
-
-                cout << "Enter policy number to delete: ";
+                cout << "Enter  number to delete: ";
                 cin >> key;
                 deleteRecordByKey(filename, key);
 
                 break;
             }
             case 6: {
+                int specialtyCode;
+                cout << "Enter specialty code: ";
+                cin >> specialtyCode;
                 string outputFilename;
-                int diseaseCode;
-
-                cout << "Enter output filename for patient list: ";
+                cout << "Enter output filename for university list: ";
                 cin >> outputFilename;
-
-                cout << "Enter disease code: ";
-
-                cin >> diseaseCode;
-                createPatientListByDiseaseCode(filename, outputFilename, diseaseCode);
-
+                generateUniversityListBySpecialty(specialtyCode, outputFilename);
                 break;
             }
             case 7: {
-                int key;
-                cout << "Enter policy number to delete patient: ";
-                cin >> key;
-
-                deletePatientByKey(filename, key);
+                string specialtyName;
+                int newCode;
+                cout << "Enter specialty name: ";
+                cin >> specialtyName;
+                cout << "Enter new specialty code: ";
+                cin >> newCode;
+                changeSpecialtyCodeByName(specialtyName, newCode);
                 break;
             }
             case 0:
