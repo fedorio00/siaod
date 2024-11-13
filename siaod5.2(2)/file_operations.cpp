@@ -21,10 +21,9 @@ void convertTextToBinary(const string& inputFilename, const string& outputFilena
         return;
     }
 
-    Patient patient;
-    while (inputFile >> patient.policyNumber >> patient.lastName >> patient.firstName >> patient.patronymic >>
-           patient.diseaseCode >> patient.diagnosisDate >> patient.doctorCode) {
-        outputFile.write(reinterpret_cast<char*>(&patient), sizeof(Patient));
+    Specialization specialization;
+    while (inputFile >> specialization.specialtyCode >> specialization.universityName >> specialization.specialtyName) {
+        outputFile.write(reinterpret_cast<char*>(&specialization), sizeof(Specialization));
     }
 
     inputFile.close();
@@ -44,15 +43,11 @@ void convertBinaryToText(const string& inputFilename, const string& outputFilena
         return;
     }
 
-    Patient patient;
-    while (inputFile.read(reinterpret_cast<char*>(&patient), sizeof(Patient))) {
-        outputFile << "Policy Number: " << patient.policyNumber << "\n"
-                   << "Last Name: " << patient.lastName << "\n"
-                   << "First Name: " << patient.firstName << "\n"
-                   << "Patronymic: " << patient.patronymic << "\n"
-                   << "Disease Code: " << patient.diseaseCode << "\n"
-                   << "Diagnosis Date: " << patient.diagnosisDate << "\n"
-                   << "Doctor Code: " << patient.doctorCode << "\n\n";
+    Specialization specialization;
+    while (inputFile.read(reinterpret_cast<char*>(&specialization), sizeof(Specialization))) {
+        outputFile << "Specialty Code: " << specialization.specialtyCode << "\n"
+                   << "University Name: " << specialization.universityName << "\n"
+                   << "Specialty Name: " << specialization.specialtyName << "\n\n";
     }
 
     inputFile.close();
@@ -66,15 +61,11 @@ void displayBinaryFileContent(const string& filename) {
         return;
     }
 
-    Patient patient;
-    while (file.read(reinterpret_cast<char*>(&patient), sizeof(Patient))) {
-        cout << "Policy Number: " << patient.policyNumber << "\n"
-             << "Last Name: " << patient.lastName << "\n"
-             << "First Name: " << patient.firstName << "\n"
-             << "Patronymic: " << patient.patronymic << "\n"
-             << "Disease Code: " << patient.diseaseCode << "\n"
-             << "Diagnosis Date: " << patient.diagnosisDate << "\n"
-             << "Doctor Code: " << patient.doctorCode << "\n\n";
+    Specialization specialization;
+    while (file.read(reinterpret_cast<char*>(&specialization), sizeof(Specialization))) {
+        cout << "Specialty Code: " << specialization.specialtyCode << "\n"
+             << "University Name: " << specialization.universityName << "\n"
+             << "Specialty Name: " << specialization.specialtyName << "\n\n";
     }
 
     file.close();
@@ -87,16 +78,12 @@ void accessRecordByIndex(const string& filename, int index) {
         return;
     }
 
-    file.seekg(index * sizeof(Patient), ios::beg);
-    Patient patient;
-    if (file.read(reinterpret_cast<char*>(&patient), sizeof(Patient))) {
-        cout << "Policy Number: " << patient.policyNumber << "\n"
-             << "Last Name: " << patient.lastName << "\n"
-             << "First Name: " << patient.firstName << "\n"
-             << "Patronymic: " << patient.patronymic << "\n"
-             << "Disease Code: " << patient.diseaseCode << "\n"
-             << "Diagnosis Date: " << patient.diagnosisDate << "\n"
-             << "Doctor Code: " << patient.doctorCode << "\n";
+    file.seekg(index * sizeof(Specialization), ios::beg);
+    Specialization specialization;
+    if (file.read(reinterpret_cast<char*>(&specialization), sizeof(Specialization))) {
+        cout << "Specialty Code: " << specialization.specialtyCode << "\n"
+             << "University Name: " << specialization.universityName << "\n"
+             << "Specialty Name: " << specialization.specialtyName << "\n";
     } else {
         cerr << "Record not found at index: " << index << endl;
     }
@@ -117,11 +104,11 @@ void deleteRecordByKey(const string& filename, int key) {
         return;
     }
 
-    Patient patient;
+    Specialization specialization;
     bool found = false;
-    while (inputFile.read(reinterpret_cast<char*>(&patient), sizeof(Patient))) {
-        if (patient.policyNumber != key) {
-            outputFile.write(reinterpret_cast<char*>(&patient), sizeof(Patient));
+    while (inputFile.read(reinterpret_cast<char*>(&specialization), sizeof(Specialization))) {
+        if (specialization.specialtyCode != key) {
+            outputFile.write(reinterpret_cast<char*>(&specialization), sizeof(Specialization));
         } else {
             found = true;
         }
@@ -138,31 +125,37 @@ void deleteRecordByKey(const string& filename, int key) {
     }
 }
 
-void createPatientListByDiseaseCode(const string& inputFilename, const string& outputFilename, int diseaseCode) {
+void generateUniversityListBySpecialty(const string& inputFilename, int specialtyCode, const string& outputFilename) {
     ifstream inputFile(inputFilename, ios::binary);
     if (!inputFile) {
-        cerr << "Error opening file: " << inputFilename << endl;
+        cerr << "Ошибка открытия файла: " << inputFilename << endl;
         return;
     }
 
-    ofstream outputFile(outputFilename, ios::binary);
+    ofstream outputFile(outputFilename);
     if (!outputFile) {
-        cerr << "Error opening file: " << outputFilename << endl;
+        cerr << "Ошибка открытия выходного файла." << endl;
         return;
     }
 
-    Patient patient;
-    while (inputFile.read(reinterpret_cast<char*>(&patient), sizeof(Patient))) {
-        if (strcmp(patient.diseaseCode, to_string(diseaseCode).c_str()) == 0) {
-            outputFile.write(reinterpret_cast<char*>(&patient), sizeof(Patient));
+    Specialization specialization;
+    bool found = false;
+    while (inputFile.read(reinterpret_cast<char*>(&specialization), sizeof(Specialization))) {
+        if (specialization.specialtyCode == specialtyCode) {
+            outputFile << specialization.universityName << "\n";
+            found = true;
         }
+    }
+
+    if (!found) {
+        cerr << "Специальности с кодом " << specialtyCode << " не найдено." << endl;
     }
 
     inputFile.close();
     outputFile.close();
 }
 
-void deletePatientByKey(const string& filename, int key) {
+void changeSpecialtyCodeByName(const string& filename, const string& specialtyName, int newCode) {
     ifstream inputFile(filename, ios::binary);
     if (!inputFile) {
         cerr << "Error opening file: " << filename << endl;
@@ -175,16 +168,25 @@ void deletePatientByKey(const string& filename, int key) {
         return;
     }
 
-    Patient patient;
-    while (inputFile.read(reinterpret_cast<char*>(&patient), sizeof(Patient))) {
-        if (patient.policyNumber != key) {
-            outputFile.write(reinterpret_cast<char*>(&patient), sizeof(Patient));
+    Specialization specialization;
+    bool found = false;
+    while (inputFile.read(reinterpret_cast<char*>(&specialization), sizeof(Specialization))) {
+        if (strcmp(specialization.specialtyName, specialtyName.c_str()) == 0) {
+            specialization.specialtyCode = newCode;
+            found = true;
         }
+        outputFile.write(reinterpret_cast<char*>(&specialization), sizeof(Specialization));
     }
 
     inputFile.close();
     outputFile.close();
 
-    remove(filename.c_str());
-    rename("temp.dat", filename.c_str());
+    if (found) {
+        remove(filename.c_str());
+        rename("temp.dat", filename.c_str());
+        cout << "Specialty code updated successfully." << endl;
+    } else {
+        cerr << "Specialty with name '" << specialtyName << "' not found." << endl;
+        remove("temp.dat");
+    }
 }
