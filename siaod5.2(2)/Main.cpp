@@ -63,7 +63,11 @@ int main() {
                 string outputFilename;
                 cout << "Enter output filename for university list: ";
                 cin >> outputFilename;
+<<<<<<< HEAD
                 generateUniversityListBySpecialty(filename, specialtyCode, outputFilename);
+=======
+                generateUniversityListBySpecialty(specialtyCode, outputFilename);
+>>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
                 break;
             }
             case 7: {
@@ -73,7 +77,11 @@ int main() {
                 cin >> specialtyName;
                 cout << "Enter new specialty code: ";
                 cin >> newCode;
+<<<<<<< HEAD
                 changeSpecialtyCodeByName(filename, specialtyName, newCode);
+=======
+                changeSpecialtyCodeByName(specialtyName, newCode);
+>>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
                 break;
             }
             case 0:

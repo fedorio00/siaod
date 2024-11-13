@@ -125,25 +125,42 @@ void deleteRecordByKey(const string& filename, int key) {
     }
 }
 
+<<<<<<< HEAD
 void generateUniversityListBySpecialty(const string& inputFilename, int specialtyCode, const string& outputFilename) {
     ifstream inputFile(inputFilename, ios::binary);
     if (!inputFile) {
         cerr << "Ошибка открытия файла: " << inputFilename << endl;
+=======
+void generateUniversityListBySpecialty(int specialtyCode, const string& outputFilename) {
+    ifstream inputFile("data.dat", ios::binary);
+    if (!inputFile) {
+        cerr << "Error opening file." << endl;
+>>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
         return;
     }
 
     ofstream outputFile(outputFilename);
     if (!outputFile) {
+<<<<<<< HEAD
         cerr << "Ошибка открытия выходного файла." << endl;
+=======
+        cerr << "Error opening output file." << endl;
+>>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
         return;
     }
 
     Specialization specialization;
+<<<<<<< HEAD
     bool found = false;
     while (inputFile.read(reinterpret_cast<char*>(&specialization), sizeof(Specialization))) {
         if (specialization.specialtyCode == specialtyCode) {
             outputFile << specialization.universityName << "\n";
             found = true;
+=======
+    while (inputFile.read(reinterpret_cast<char*>(&specialization), sizeof(Specialization))) {
+        if (specialization.specialtyCode == specialtyCode) {
+            outputFile << specialization.universityName << "\n";
+>>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
         }
     }
 
@@ -155,10 +172,15 @@ void generateUniversityListBySpecialty(const string& inputFilename, int specialt
     outputFile.close();
 }
 
+<<<<<<< HEAD
 void changeSpecialtyCodeByName(const string& filename, const string& specialtyName, int newCode) {
     ifstream inputFile(filename, ios::binary);
+=======
+void changeSpecialtyCodeByName(const string& specialtyName, int newCode) {
+    ifstream inputFile("data.dat", ios::binary);
+>>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
     if (!inputFile) {
-        cerr << "Error opening file: " << filename << endl;
+        cerr << "Error opening file." << endl;
         return;
     }
 
@@ -171,7 +193,11 @@ void changeSpecialtyCodeByName(const string& filename, const string& specialtyNa
     Specialization specialization;
     bool found = false;
     while (inputFile.read(reinterpret_cast<char*>(&specialization), sizeof(Specialization))) {
+<<<<<<< HEAD
         if (strcmp(specialization.specialtyName, specialtyName.c_str()) == 0) {
+=======
+        if (specialization.specialtyName == specialtyName) {
+>>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
             specialization.specialtyCode = newCode;
             found = true;
         }
@@ -182,11 +208,18 @@ void changeSpecialtyCodeByName(const string& filename, const string& specialtyNa
     outputFile.close();
 
     if (found) {
+<<<<<<< HEAD
         remove(filename.c_str());
         rename("temp.dat", filename.c_str());
         cout << "Specialty code updated successfully." << endl;
     } else {
         cerr << "Specialty with name '" << specialtyName << "' not found." << endl;
         remove("temp.dat");
+=======
+        remove("data.dat");
+        rename("temp.dat", "data.dat");
+    } else {
+        cerr << "Specialty with name " << specialtyName << " not found." << endl;
+>>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
     }
 }

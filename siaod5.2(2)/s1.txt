@@ -27,20 +27,31 @@
 27 MFTI "Applied_Mathematics"
 28 MFTI "Informatics"
 29 MFTI "Electronics"
+<<<<<<< HEAD
 1 MFTI "Software_Engineering"
 30 MFTI "Cybernetics"
 31 MAI "Aerospace_Engineering"
 1 MGIMO "Software_Engineering"
+=======
+30 MFTI "Cybernetics"
+31 MAI "Aerospace_Engineering"
+>>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
 32 MAI "Aviation_Systems"
 33 MAI "Space_Technologies"
 34 MAI "Energy_Systems"
 6 MAI "Information_Technology"
+<<<<<<< HEAD
 1 SPBGU "Software_Engineering"
+=======
+>>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
 36 MEI "Electrical_Power_Engineering"
 37 MEI "Electrical_Engineering"
 38 MEI "Thermal_Power_Engineering"
 39 MEI "Automation"
+<<<<<<< HEAD
 1 Bauman "Software_Engineering"
+=======
+>>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
 40 MEI "Information_Systems"
 41 SPBGU "Philology"
 42 SPBGU "History"
