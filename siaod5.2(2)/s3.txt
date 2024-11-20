@@ -1,6 +1,47 @@
-MIREA
-ITMO
-MFTI
-MGIMO
-SPBGU
-Bauman
+Specialty Code: 1229791281
+University Name: REA "Software_Engineering"
+2 MIREA "Applied_Mathematics"
+3 MIREA "Cybernetics"
+4 MIREA "Control_SôûÂö
+Specialty Name: matics"
+3 MIREA "Cybernetics"
+4 MIREA "Control_SôûÂö
+
+Specialty Code: 1702130553
+University Name: ms"
+5 MIREA "Electronics"
+6 ITMO "Information_Technology"
+1 ITMO "Software_Engineering"
+8 ITMO "ôûÂö
+Specialty Name: chnology"
+1 ITMO "Software_Engineering"
+8 ITMO "ôûÂö
+
+Specialty Code: 1700952387
+University Name: rsecurity"
+9 ITMO "Mathematical_Methods"
+10 ITMO "Communication_Systems"
+11 Bauman "Machine_EnginôûÂö
+Specialty Name:  "Communication_Systems"
+11 Bauman "Machine_EnginôûÂö
+
+Specialty Code: 1769104741
+University Name: ng"
+12 Bauman "Applied_Mechanics"
+13 Bauman "Electrical_Engineering"
+14 Bauman "Automation"
+15 BôûÂö
+Specialty Name: ctrical_Engineering"
+14 Bauman "Automation"
+15 BôûÂö
+
+Specialty Code: 1634563425
+University Name: n "Materials_Technology"
+16 MISIS "Metallurgy"
+1 MISIS "Software_Engineering"
+18 MISIS "Energy"
+ôûÂö
+Specialty Name:  MISIS "Software_Engineering"
+18 MISIS "Energy"
+ôûÂö
+

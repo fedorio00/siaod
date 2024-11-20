@@ -3,8 +3,6 @@
 #include <iostream>
 #include <string>
 using namespace std;
-
-// Структура для исходных данных
 struct Record {
     string universityCode; // код специальности
     string universityName;  // название вуза
@@ -113,14 +111,16 @@ public:
     // Вывод таблицы
     void display() {
         for (int i = 0; i < TABLE_SIZE; i++) {
-            cout << i << ": ";
+            cout << "Index " << i << ": ";
             HashNode* current = table[i];
             while (current != nullptr) {
-                cout << "[Key: " << current->key 
-                     << ", Index: " << current->index << "] -> ";
+                // Вывод значений из структуры Record
+                cout << "Key = " << current->key 
+                     << ", University Code = " << current->index 
+                     << ", University Name = " << current->prK << " -> "; 
                 current = current->next;
             }
-            cout << "nullptr" << endl;
+            cout << "nullptr" << endl; // Если в ячейке нет элементов
         }
     }
 
