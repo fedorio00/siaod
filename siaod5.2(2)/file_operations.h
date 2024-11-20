@@ -20,12 +20,6 @@ void convertBinaryToText(const string& inputFilename, const string& outputFilena
 void displayBinaryFileContent(const string& filename);
 void accessRecordByIndex(const string& filename, int index);
 void deleteRecordByKey(const string& filename, int key);
-<<<<<<< HEAD
 void generateUniversityListBySpecialty(const string& inputFilename, int specialtyCode, const string& outputFilename);
 void changeSpecialtyCodeByName(const string& filename, const string& specialtyName, int newCode);
-=======
-void generateUniversityListBySpecialty(int specialtyCode, const string& outputFilename);
-void changeSpecialtyCodeByName(const string& specialtyName, int newCode);
->>>>>>> 777ce26fb592fade697eeabedea7d997d75bb942
-
 #endif // FILE_OPERATIONS_H

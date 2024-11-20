@@ -1,32 +1,22 @@
 #include <iostream>
 #include "file_operations.h"
 using namespace std;
-
 void showMenu() {
-    cout << "1. Display file content" << endl;
-    cout << "2. Append to file" << endl;
-    cout << "3. Get number by index" << endl;
-    cout << "4. Count numbers in file" << endl;
-    cout << "5. Create new file by rule" << endl;
-    cout << "0. Exit" << endl;
+    cout << "1. Display file content\n2. Append to file\n3. Get number by index\n4. Count numbers in file\n5. Create new file by rule\n0. Exit\n";
 }
-
 int main() {
     string filename;
     cout << "Enter filename: ";
     cin >> filename;
-
     if (!fileExists(filename)) {
         cerr << "File does not exist: " << filename << endl;
         return 1;
     }
-
     int choice;
     do {
         showMenu();
         cout << "Enter your choice: ";
         cin >> choice;
-
         switch (choice) {
             case 1:
                 displayFileContent(filename);
@@ -74,6 +64,5 @@ int main() {
                 cout << "Invalid choice. Please try again." << endl;
         }
     } while (choice != 0);
-
     return 0;
 }
