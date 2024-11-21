@@ -4,28 +4,23 @@
 #include <string>
 using namespace std;
 struct Record {
-    string universityCode; // код специальности
-    string universityName;  // название вуза
-    string specialtyName;   // название специальности
+    string universityCode;
+    string universityName;
+    string specialtyName;
 };
-
-// Структура элемента хэш-таблицы
 struct HashNode {
-    string key;        // ключ записи
-    int index;        // индекс в исходном массиве
-    bool prK;         // признак включения ключа
-    HashNode* next;   // указатель на следующий элемент (для цепочки)
-    
+    string key;
+    int index;
+    bool prK;
+    HashNode* next;
     HashNode(string k = "", int idx = -1) : 
         key(k), index(idx), prK(false), next(nullptr) {}
 };
-
 class HashTable {
 private:
     static const int TABLE_SIZE = 11;  // размер хэш-таблицы
     HashNode* table[TABLE_SIZE];       // массив указателей на цепочки
 
-    // Хэш-функция
     int hashFunction(const string& key) {
         // Простой хэш на основе суммы символов
         int hash = 0;
@@ -43,13 +38,10 @@ public:
         }
     }
 
-    // Вставка элемента в хэш-таблицу
     void insert(const string& key, int index) {
         int hash = hashFunction(key);
-        
         HashNode* newNode = new HashNode(key, index);
         newNode->prK = true;
-
         // Если ячейка пуста
         if (table[hash] == nullptr) {
             table[hash] = newNode;
@@ -63,8 +55,7 @@ public:
             current->next = newNode;
         }
     }
-
-    // Поиск элемента по ключу
+    
     int search(const string& key) {
         int hash = hashFunction(key);
         HashNode* current = table[hash];
@@ -77,37 +68,29 @@ public:
         }
         return -1; // элемент не найден
     }
-
-    // Удаление элемента
+    
     bool remove(const string& key) {
         int hash = hashFunction(key);
-        
         if (table[hash] == nullptr) {
             return false;
         }
-
         HashNode* current = table[hash];
         HashNode* prev = nullptr;
-
         while (current != nullptr && current->key != key) {
             prev = current;
             current = current->next;
         }
-
         if (current == nullptr) {
             return false;
         }
-
         if (prev == nullptr) {
             table[hash] = current->next;
         } else {
             prev->next = current->next;
         }
-
         delete current;
         return true;
     }
-
     // Вывод таблицы
     void display() {
         for (int i = 0; i < TABLE_SIZE; i++) {
@@ -123,7 +106,6 @@ public:
             cout << "nullptr" << endl; // Если в ячейке нет элементов
         }
     }
-
     // Деструктор
     ~HashTable() {
         for (int i = 0; i < TABLE_SIZE; i++) {
@@ -136,5 +118,4 @@ public:
         }
     }
 };
-
 #endif 
