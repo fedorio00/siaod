@@ -9,7 +9,7 @@ struct Node {
     Node* right;
     Node(char value) : data(value), left(nullptr), right(nullptr) {}
 };
-// Функция для создания идеально сбалансированного дерева
+
 Node* createBalancedTree(const vector<char>& keys, int start, int end) {
     if (start > end) return nullptr;
     int mid = start + (end - start) / 2;
@@ -18,7 +18,7 @@ Node* createBalancedTree(const vector<char>& keys, int start, int end) {
     root->right = createBalancedTree(keys, mid + 1, end);
     return root;
 }
-// Функция для определения уровня, на котором находится заданное значение
+
 int findLevel(Node* root, char value, int level = 1) {
     if (!root) return -1;
     if (root->data == value) return level;
@@ -26,17 +26,17 @@ int findLevel(Node* root, char value, int level = 1) {
     if (leftLevel != -1) return leftLevel;
     return findLevel(root->right, value, level + 1);
 }
-// функция для подсчета количества узлов
+
 int countNodes(Node* root) {
     if (!root) return 0;
     return 1 + countNodes(root->left) + countNodes(root->right);
 }
-// Функция для подсчета количества узлов в левом поддереве
+
 int countNodesInLeftSubtree(Node* root) {
     if (!root || !root->left) return 0;
     return countNodes(root->left);
 }
-// Вывод дерева (обход в ширину)
+
 void printTreeVertically(Node* root) {
     if (!root) return;
     queue<Node*> q;
@@ -51,7 +51,7 @@ void printTreeVertically(Node* root) {
             if (current->left) q.push(current->left);
             if (current->right) q.push(current->right);
         }
-        // Вывод узлов текущего уровня
+        
         for (char node : levelNodes) {
             cout << node << " ";
         }
