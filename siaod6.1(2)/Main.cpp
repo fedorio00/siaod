@@ -27,6 +27,7 @@ int main() {
         cout << "2. Find record by key\n";
         cout << "3. Remove record\n";
         cout << "4. Display hash table\n";
+        cout << "5. Test search time for different positions\n";
         cout << "0. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
@@ -49,6 +50,13 @@ int main() {
             case 4:
                 hashTable.display();
                 break;
+            case 5: {
+                // Тестирование времени поиска
+                if (!manager.testSearchTime()) {
+                    cout << "Please load records first (option 1)\n";
+                }
+                break;
+            }
             case 0:
                 cout << "Exiting...\n";
                 break;

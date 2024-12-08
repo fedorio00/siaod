@@ -24,29 +24,22 @@ private:
     int TABLE_SIZE;  // размер хэш-таблицы
     HashNode** table;       // динамический массив указателей на цепочки
     int itemCount;         // количество элементов в таблице
+    const double LOAD_FACTOR_THRESHOLD = 0.5;
 
     int hashFunction(const string& key) {
-        // метод умножения с золотым сечением
-        const double A = 0.6180339887; // (sqrt(5) - 1) / 2
-        unsigned long long hash = 0;
-        
-        // Вычисляем хеш строки
-        for(char ch : key) {
-            hash = hash * 31 + ch;
-        }
-        
-        // Применяем метод умножения
-        double temp = hash * A;
-        double frac = temp - floor(temp); // Берем дробную часть
-        return floor(TABLE_SIZE * frac);
+        int numericKey = stoi(key);
+        const double A = 0.618033988749895;  // 1/φ, где φ - золотое сечение
+        double temp = numericKey * A;
+        double fractional = temp - floor(temp);  // берём дробную часть
+        return floor(TABLE_SIZE * fractional);
     }
 
     void rehash() {
         int oldSize = TABLE_SIZE;
         HashNode** oldTable = table;
         
-        // Увеличиваем размер таблицы примерно в 2 раза
-        TABLE_SIZE = oldSize * 2 + 1;
+        // Находим следующее простое число после oldSize * 2
+        TABLE_SIZE = getNextPrime(oldSize * 2);
         table = new HashNode*[TABLE_SIZE];
         
         // Инициализируем новую таблицу
@@ -67,20 +60,38 @@ private:
                 if (table[newHash] == nullptr) {
                     table[newHash] = current;
                 } else {
-                    HashNode* temp = table[newHash];
-                    while (temp->next != nullptr) {
-                        temp = temp->next;
-                    }
-                    temp->next = current;
+                    current->next = table[newHash];
+                    table[newHash] = current;
                 }
                 current = next;
             }
         }
+        
         delete[] oldTable;
+        cout << "Rehashed: new size = " << TABLE_SIZE << endl;
+    }
+
+    // Вспомогательная функция для проверки, является ли число простым
+    bool isPrime(int n) {
+        if (n <= 1) return false;
+        if (n <= 3) return true;
+        if (n % 2 == 0 || n % 3 == 0) return false;
+        for (int i = 5; i * i <= n; i += 6) {
+            if (n % i == 0 || n % (i + 2) == 0) return false;
+        }
+        return true;
+    }
+
+    // Находит следующее простое число после n
+    int getNextPrime(int n) {
+        while (!isPrime(n)) {
+            n++;
+        }
+        return n;
     }
 
 public:
-    HashTable() : TABLE_SIZE(11), itemCount(0) {
+    HashTable() : TABLE_SIZE(23), itemCount(0) { 
         table = new HashNode*[TABLE_SIZE];
         for (int i = 0; i < TABLE_SIZE; i++) {
             table[i] = nullptr;
@@ -100,26 +111,19 @@ public:
         delete[] table;
     }
 
-    void insert(const string& key, int index, const string& universityName, const string& specialtyName) {
-        // Проверяем коэффициент нагрузки
-        float loadFactor = (float)(itemCount + 1) / TABLE_SIZE;
-        if (loadFactor > 0.7) {
+    void insert(string key, int index, string universityName, string specialtyName) {
+        // Проверяем коэффициент заполнения
+        if ((double)itemCount / TABLE_SIZE > LOAD_FACTOR_THRESHOLD) {
             rehash();
         }
 
-        int hash = hashFunction(key);
+        int hashIndex = hashFunction(key);
         HashNode* newNode = new HashNode(key, index, universityName, specialtyName);
-        newNode->prK = true;
-
-        if (table[hash] == nullptr) {
-            table[hash] = newNode;
-        } else {
-            HashNode* current = table[hash];
-            while (current->next != nullptr) {
-                current = current->next;
-            }
-            current->next = newNode;
-        }
+        
+        // Вставляем в начало списка (более эффективно)
+        newNode->next = table[hashIndex];
+        table[hashIndex] = newNode;
+        
         itemCount++;
     }
     
@@ -173,6 +177,14 @@ public:
             }
             cout << endl;
         }
+    }
+
+    bool isEmpty() const {
+        return itemCount == 0;
+    }
+
+    int getSize() const {
+        return itemCount;
     }
 };
 #endif

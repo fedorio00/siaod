@@ -7,11 +7,23 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <chrono>
 
 class FileManager {
 private:
     HashTable& hashTable;
     string filename;
+
+    double measureSearchTime(int key) {
+        auto start = chrono::high_resolution_clock::now();
+        
+        string keyStr = to_string(key);
+        int index = hashTable.search(keyStr);
+        
+        auto end = chrono::high_resolution_clock::now();
+        chrono::duration<double, std::milli> duration = end - start;
+        return duration.count();
+    }
 
 public:
     FileManager(HashTable& ht, const string& fname) : hashTable(ht), filename(fname) {}
@@ -123,6 +135,36 @@ public:
 
         file.close();
         cout << "All records loaded into hash table.\n";
+    }
+
+    bool testSearchTime() {
+        // Проверяем, есть ли записи в таблице
+        if (hashTable.isEmpty()) {
+            return false;
+        }
+
+        // Получаем количество записей
+        int recordCount = hashTable.getSize();
+        if (recordCount == 0) {
+            return false;
+        }
+
+        // Тестируем первую запись
+        int firstKey = 1; // Предполагаем, что ключи начинаются с 1
+        double firstTime = measureSearchTime(firstKey);
+        cout << "Time to find first record (key=" << firstKey << "): " << firstTime << " ms\n";
+
+        // Тестируем запись в середине
+        int middleKey = recordCount / 2;
+        double middleTime = measureSearchTime(middleKey);
+        cout << "Time to find middle record (key=" << middleKey << "): " << middleTime << " ms\n";
+
+        // Тестируем последнюю запись
+        int lastKey = recordCount;
+        double lastTime = measureSearchTime(lastKey);
+        cout << "Time to find last record (key=" << lastKey << "): " << lastTime << " ms\n";
+
+        return true;
     }
 };
 
