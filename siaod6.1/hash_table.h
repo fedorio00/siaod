@@ -3,11 +3,13 @@
 #include <iostream>
 #include <string>
 using namespace std;
+
 struct Record {
     string universityCode;
     string universityName;
     string specialtyName;
 };
+
 struct HashNode {
     string key;
     int index;
@@ -16,44 +18,91 @@ struct HashNode {
     HashNode(string k = "", int idx = -1) : 
         key(k), index(idx), prK(false), next(nullptr) {}
 };
+
 class HashTable {
 private:
-    static const int TABLE_SIZE = 11;  // размер хэш-таблицы
-    HashNode* table[TABLE_SIZE];       // массив указателей на цепочки
+    static const int INITIAL_SIZE = 11;  // начальный размер хэш-таблицы
+    int TABLE_SIZE;                      // текущий размер таблицы
+    int elementCount;                    // количество элементов
+    const double LOAD_FACTOR_THRESHOLD = 0.7;  // порог коэффициента загрузки
+    HashNode** table;                    // массив указателей
 
     int hashFunction(const string& key) {
-        // Простой хэш на основе суммы символов
         int hash = 0;
         for (char ch : key) {
-            hash += ch;
+            hash = (hash * 31 + ch);
         }
-        return hash % TABLE_SIZE;
+        return abs(hash % TABLE_SIZE);
+    }
+
+    bool isPrime(int n) {
+        if (n <= 1) return false;
+        if (n <= 3) return true;
+        if (n % 2 == 0 || n % 3 == 0) return false;
+        for (int i = 5; i * i <= n; i += 6) {
+            if (n % i == 0 || n % (i + 2) == 0) return false;
+        }
+        return true;
+    }
+
+    int nextPrime(int n) {
+        while (!isPrime(n)) {
+            n++;
+        }
+        return n;
+    }
+
+    void rehash() {
+        int oldSize = TABLE_SIZE;
+        HashNode** oldTable = table;
+        
+        // Находим следующий размер (следующее простое число)
+        TABLE_SIZE = nextPrime(TABLE_SIZE * 2);
+        table = new HashNode*[TABLE_SIZE];
+        for (int i = 0; i < TABLE_SIZE; i++) {
+            table[i] = nullptr;
+        }
+
+        // Переносим элементы в новую таблицу
+        elementCount = 0;
+        for (int i = 0; i < oldSize; i++) {
+            HashNode* current = oldTable[i];
+            while (current != nullptr) {
+                HashNode* next = current->next;
+                // Пересчитываем хеш для нового размера таблицы
+                int newHash = hashFunction(current->key);
+                current->next = table[newHash];
+                table[newHash] = current;
+                elementCount++;
+                current = next;
+            }
+        }
+        delete[] oldTable;
     }
 
 public:
-    HashTable() {
-        // Инициализация таблицы пустыми указателями
+    HashTable() : TABLE_SIZE(INITIAL_SIZE), elementCount(0) {
+        table = new HashNode*[TABLE_SIZE];
         for (int i = 0; i < TABLE_SIZE; i++) {
             table[i] = nullptr;
         }
     }
 
     void insert(const string& key, int index) {
+        // Проверяем, нужно ли выполнить rehashing
+        double loadFactor = static_cast<double>(elementCount + 1) / TABLE_SIZE;
+        if (loadFactor >= LOAD_FACTOR_THRESHOLD) {
+            rehash();
+        }
+        
         int hash = hashFunction(key);
         HashNode* newNode = new HashNode(key, index);
         newNode->prK = true;
-        // Если ячейка пуста
-        if (table[hash] == nullptr) {
-            table[hash] = newNode;
-        }
-        // Если есть коллизия
-        else {
-            HashNode* current = table[hash];
-            while (current->next != nullptr) {
-                current = current->next;
-            }
-            current->next = newNode;
-        }
+
+        // Вставляем в начало цепочки
+        newNode->next = table[hash];
+        table[hash] = newNode;
+        elementCount++;
     }
     
     int search(const string& key) {
@@ -89,24 +138,24 @@ public:
             prev->next = current->next;
         }
         delete current;
+        elementCount--;
         return true;
     }
-    // Вывод таблицы
+
     void display() {
         for (int i = 0; i < TABLE_SIZE; i++) {
             cout << "Index " << i << ": ";
             HashNode* current = table[i];
             while (current != nullptr) {
-                // Вывод значений из структуры Record
                 cout << "Key = " << current->key 
                      << ", University Code = " << current->index 
                      << ", University Name = " << current->prK << " -> "; 
                 current = current->next;
             }
-            cout << "nullptr" << endl; // Если в ячейке нет элементов
+            cout << "nullptr" << endl;
         }
     }
-    // Деструктор
+
     ~HashTable() {
         for (int i = 0; i < TABLE_SIZE; i++) {
             HashNode* current = table[i];
@@ -116,6 +165,8 @@ public:
                 current = next;
             }
         }
+        delete[] table;
     }
 };
-#endif 
+
+#endif
